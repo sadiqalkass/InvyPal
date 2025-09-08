@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+    --color-primary: #5f6fff;
+}
+
+
+*{
+    font-family: "Outfit", sans-serif;
+}
+
+/* Hide scrollbar for Chrome, Safari, Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove scrollbar arrows in Webkit browsers */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, Firefox */
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+  scrollbar-color: transparent transparent;
+}
+
+html{
+    background-color: white;
+    color: black;
+}
