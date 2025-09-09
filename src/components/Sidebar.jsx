@@ -3,7 +3,7 @@ import { NavLink } from "react-router";
 
 const Sidebar = () => {
   return (
-    <div className="hidden md:block w-[250px] min-h-screen bg-white border-r">
+    <div className="hidden md:block w-[250px] min-h-[90vh] bg-white border-r">
     <ul className="text-[#515151] mt-5">
       <NavLink
         className={({ isActive }) =>

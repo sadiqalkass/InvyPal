@@ -1,8 +1,9 @@
-import { account, databases } from "../appwrite";
+import { account, databases, storage } from "../appwrite";
 import { ID, Query } from "appwrite";
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const USER_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USER_COLLECTION_ID;
+const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
 export const signupUser = async (email, password, name, companyName) => {
   try {
@@ -89,5 +90,46 @@ export const logoutUser = async () => {
   }
 };
 
+export const UpdateUserInfo = async (userId, name, companyName, fileId) => {
+  try {
+    //Personal Info
+    if(name && !companyName && !fileId){
+      const response = await databases.updateDocument(
+        DATABASE_ID,
+        USER_COLLECTION_ID,
+        userId,
+        {
+          name}
+      )
+      if (response) {
+        return {success: true, message: "Personal Info updated successfully"}
+      }
+    }
+    //Company Settings
+    if(companyName && !name && fileId){
+      const imgUrl = await storage.createFile(
+        BUCKET_ID,
+        ID.unique(),
+        fileId
+      )
+      if (!imgUrl) throw new Error("Image not uploaded. Please try again");
 
+      const response = await databases.updateDocument(
+        DATABASE_ID,
+        USER_COLLECTION_ID,
+        userId,
+        {
+          companyName,
+          companyLogo: imgUrl}
+      ) 
+      if (response) {
+        return {success: true, message: "Company Info updated successfully"}
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message || "Updating user info failed. Try again.");
+  }
+}
 

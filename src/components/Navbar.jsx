@@ -21,11 +21,11 @@ const Navbar = () => {
   };
   return (
     user && (
-      <div className="flex justify-between items-center px-4 sm:px-10 py-3 border-b bg-white">
+      <div className="flex justify-between items-center px-4 sm:px-7 py-3 border-b bg-white">
 
         <div className="flex items-center text-xs gap-2">
-          <div className="overflow-hidden h-[70px] flex justify-start items-center w-[50%]">
-            <img src={assests.logo} className="w-[250px]" alt="InvyMate logo" />
+          <div className="overflow-hidden h-[50px] flex justify-start items-center w-[150px]">
+            <img src={assests.logo} className="md:w-[250px] w-full" alt="InvyMate logo" />
           </div>
         </div>
         
@@ -51,15 +51,15 @@ const Navbar = () => {
 
         {/* ---------Mobile Menu --------- */}
       <div className="flex items-center gap-4 md:hidden">
-        <span className="text-2xl md:hidden" onClick={() => setShowMenu(true)}>
+        <span className="text-2xl md:hidden cursor-pointer transition-all duration-300" onClick={() => setShowMenu(true)}>
           <ion-icon name="menu-outline"></ion-icon>
         </span>
         <div
-          className={`${showMenu ? "fixed w-full" : "h-0 w-0"} mb:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300`}
+          className={`${showMenu ? "fixed w-[70%]" : "h-0 w-0"} mb:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-gray-100 transition-all duration-300`}
         >
           <div className="flex items-center justify-between px-5 py-6">
             <img className="w-36" src={assests.logo} alt="" />
-            <span className="text-xl" onClick={() => setShowMenu(false)}>
+            <span className="text-xl cursor-pointer" onClick={() => setShowMenu(false)}>
              <ion-icon name="close-outline"></ion-icon>
             </span>
           </div>
@@ -67,14 +67,17 @@ const Navbar = () => {
             <NavLink onClick={() => setShowMenu(false)} to="/">
               <p className="px-4 py-2 rounded inline-block">Dashboard</p>
             </NavLink>
-            <NavLink onClick={() => setShowMenu(false)} to="/stock">
-              <p className="px-4 py-2 rounded inline-block">Stock</p>
+            <NavLink className={({ isActive }) => `px-4 py-2 rounded inline-block ${isActive? 'bg-blue-400 text-white' : ''}`} onClick={() => setShowMenu(false)} to="/stock">
+              <p>Stock</p>
             </NavLink>
-            <NavLink onClick={() => setShowMenu(false)} to="/category">
-              <p className="px-4 py-2 rounded inline-block">Category</p>
+            <NavLink className={({ isActive }) => `px-4 py-2 rounded inline-block ${isActive? 'bg-blue-400 text-white' : ''}`} onClick={() => setShowMenu(false)} to="/category">
+              <p>Category</p>
             </NavLink>
-            <NavLink onClick={() => setShowMenu(false)} to="/add-stock">
-              <p className="px-4 py-2 rounded inline-block">Add Stock</p>
+            <NavLink className={({ isActive }) => `px-4 py-2 rounded inline-block ${isActive? 'bg-blue-400 text-white' : ''}`} onClick={() => setShowMenu(false)} to="/add-stock">
+              <p>Add Stock</p>
+            </NavLink>
+            <NavLink className={({ isActive }) => `px-4 py-2 rounded inline-block ${isActive? 'bg-blue-400 text-white' : ''}`} onClick={() => setShowMenu(false)} to="/profile">
+              <p>Profile</p>
             </NavLink>
             <button
               type="submit"

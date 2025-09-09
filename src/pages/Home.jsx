@@ -87,7 +87,7 @@ const Home = () => {
   return loading ? (
     <LoadingScreen />
   ) : (
-    <div className="p-6 space-y-6 overflow-scroll w-full h-[100vh] bg-white">
+    <div className="p-6 space-y-6 overflow-scroll w-full h-[80vh] bg-white">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="shadow-sm border-none rounded-xl">
@@ -263,7 +263,7 @@ const Home = () => {
       {/* Tables */}
       <div className="flex w-full gap-6">
         {/* Recent Stock Items */}
-        <Card className="shadow-sm border-none rounded-xl">
+        <Card className="shadow-sm border-none rounded-xl w-full">
           <CardContent className="p-4">
             <h3 className="font-semibold mb-3">Recent 5 Stock Items</h3>
             {stockItems.length === 0 ? (
@@ -276,7 +276,6 @@ const Home = () => {
                     <TableHead>Quantity</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead>Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -285,8 +284,7 @@ const Home = () => {
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{getCategory(item.categoryId)}</TableCell>
-                      <TableCell>${item.price}</TableCell>
-                      <TableCell>{item.date}</TableCell>
+                      <TableCell>₦{item.price}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

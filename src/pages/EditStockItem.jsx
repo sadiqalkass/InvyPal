@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { fetchStockItemById } from "../lib/actions/stock.actions";
 
 const EditStockItem = () => {
+  const {user} = useAuth()
   const { id } = useParams();
   const [stock, setStock] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const EditStockItem = () => {
     };
     getStockItem();
   }, []);
-  return loading ? (
+  return user.role === 'admin' && loading ? (
     <LoadingScreen />
   ) : (
     <div className="m-4 md:mt-7 w-full">

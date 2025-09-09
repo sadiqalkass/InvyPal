@@ -139,7 +139,6 @@ useEffect(() => {
                   <p className="text-green-400 text-xl cursor-pointer">
                     <ion-icon name="pencil-outline"></ion-icon>
                   </p>
-
                   </Link>
                 </div>
               </div>

@@ -5,15 +5,13 @@ import DeleteCategoryButton from "../components/DeleteCategoryButton";
 import { Link } from "react-router";
 
 const CategoryList = () => {
-  const { categories, stockItems, getCategories, getStockItems } = useAuth();
+  const { categories, stockItems, getCategories, getStockItems, user} = useAuth();
   const [loading, setLoading] = useState(true);
 
   const getItemsCount = (cateId) =>{
     const stockItemCount = stockItems.filter(item => item.categoryId === cateId)
     return stockItemCount.length
   }
-
-
 
  useEffect(() => {
   const fetchData = async () => {

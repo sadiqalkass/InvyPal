@@ -3,15 +3,16 @@ import { assests } from "../assests/assests";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
-
 const Login = () => {
   const [state, setstate] = useState("Login");
   const { login, signup } = useAuth();
   const [formData, setFormData] = useState({
     companyName: "",
+    companyId: '',
     password: "",
     name: "",
     email: "",
+    role: ''
   });
   const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
@@ -37,7 +38,6 @@ const onSubmitHandle = async (e) => {
     setLoading(false);
   }
 };
-
 
   return (
     <div className="flex w-full">
@@ -78,6 +78,18 @@ const onSubmitHandle = async (e) => {
                     required
                   />
                 </div>
+
+                <div className="w-full">
+                  <p>Role</p>
+                  <select name="role" className="border border-zinc-300 rounded w-full p-2 mt-1" onChange={handleChange} id="">
+                    <option value="blank">----</option>
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                  </select>
+                </div>
+                
+                {formData.role && formData.role === 'admin'? (
+
                 <div className="w-full">
                   <p>Company Name</p>
                   <input
@@ -89,6 +101,19 @@ const onSubmitHandle = async (e) => {
                     required
                   />
                 </div>
+                ): (
+                  <div className="w-full">
+                  <p>Company Id</p>
+                  <input
+                    type="text"
+                    name="companyId"
+                    value={formData.companyId}
+                    onChange={handleChange}
+                    className="border border-zinc-300 rounded w-full p-2 mt-1"
+                    required
+                  />
+                </div>
+                )}
               </>
             ) : null}
 

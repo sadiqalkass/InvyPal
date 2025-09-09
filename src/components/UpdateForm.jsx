@@ -38,6 +38,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
     e.preventDefault();
     try {
       if (state === "Category") {
+        setLoading(true)
         const response = await updateCategory(
           formData.cateId,
           formData.cateName.toUpperCase(),
@@ -50,6 +51,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
         }
       }
       if (state === "Stock") {
+        setLoading(true)
         const response = await updateStockItem(
           formData.itemId,
           itemImg,
@@ -68,6 +70,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
             quantity: "",
             price: "",
             imgId: "",
+            imgUrl: "",
           });
           setItemImg(false)
           toast.success(response.message)
