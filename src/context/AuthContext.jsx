@@ -15,7 +15,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [company, setCompany] = useState();
+  const [company, setCompany] = useState(null);
 
   const [categories, setCategories] = useState([]);
   const [stockItems, setStockItems] = useState([]);
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
   //Fetch data when company is available
   useEffect(() => {
-    if (company !== null) {
+    if (company) {
       getCategories();
       getStockItems();
     }
@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }) => {
         getStockItems,
         company,
         checkUser,
-        getCompanyDets
+        getCompanyDets,
       }}
     >
       {!loading && children}
