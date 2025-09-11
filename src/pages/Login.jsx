@@ -8,11 +8,11 @@ const Login = () => {
   const { login, signup } = useAuth();
   const [formData, setFormData] = useState({
     companyName: "",
-    companyId: '',
     password: "",
     name: "",
     email: "",
-    role: ''
+    role: "",
+    companyId: "",
   });
   const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
@@ -25,8 +25,12 @@ const onSubmitHandle = async (e) => {
   try {
     setLoading(true);
     if (state === "Sign Up") {
-      const { email, password, name, companyName } = formData;
-      await signup(email, password, name, companyName);
+      const { email, password, name, companyName, companyId, role } = formData;
+      if (role === 'admin') {
+        await signup(email, password, name, role, companyName, null);
+      } else {
+        await signup(email, password, name, role, null, companyId);
+      }
     } else {
       const { email, password } = formData;
       await login(email, password);
@@ -38,6 +42,8 @@ const onSubmitHandle = async (e) => {
     setLoading(false);
   }
 };
+
+
 
   return (
     <div className="flex w-full">
@@ -57,7 +63,7 @@ const onSubmitHandle = async (e) => {
           onSubmit={onSubmitHandle}
           className="min-h-[80vh] flex items-center mb-1"
         >
-          <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-sm ">
+          <div className="flex flex-col gap-3 m-auto items-start p-7 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-sm ">
             <p className="text-2xl font-semibold">
               {state === "Sign Up" ? "Create Account" : "Login"}
             </p>
@@ -81,39 +87,44 @@ const onSubmitHandle = async (e) => {
 
                 <div className="w-full">
                   <p>Role</p>
-                  <select name="role" className="border border-zinc-300 rounded w-full p-2 mt-1" onChange={handleChange} id="">
+                  <select
+                    name="role"
+                    className="border border-zinc-300 rounded w-full p-2 mt-1"
+                    onChange={handleChange}
+                    id=""
+                  >
                     <option value="blank">----</option>
                     <option value="admin">Admin</option>
                     <option value="staff">Staff</option>
                   </select>
                 </div>
-                
-                {formData.role && formData.role === 'admin'? (
 
-                <div className="w-full">
-                  <p>Company Name</p>
-                  <input
-                    type="text"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleChange}
-                    className="border border-zinc-300 rounded w-full p-2 mt-1"
-                    required
-                  />
-                </div>
-                ): (
-                  <div className="w-full">
-                  <p>Company Id</p>
-                  <input
-                    type="text"
-                    name="companyId"
-                    value={formData.companyId}
-                    onChange={handleChange}
-                    className="border border-zinc-300 rounded w-full p-2 mt-1"
-                    required
-                  />
-                </div>
-                )}
+                {formData.role &&
+                  (formData.role === "admin" ? (
+                    <div className="w-full">
+                      <p>Company Name</p>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleChange}
+                        className="border border-zinc-300 rounded w-full p-2 mt-1"
+                        required
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full">
+                      <p>Company Id</p>
+                      <input
+                        type="text"
+                        name="companyId"
+                        value={formData.companyId}
+                        onChange={handleChange}
+                        className="border border-zinc-300 rounded w-full p-2 mt-1"
+                        required
+                      />
+                    </div>
+                  ))}
               </>
             ) : null}
 

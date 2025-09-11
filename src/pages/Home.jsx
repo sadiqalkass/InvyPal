@@ -23,7 +23,8 @@ import { useAuth } from "../context/AuthContext";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
-  const { stockItems, categories, getStockItems, getCategories } = useAuth();
+  const { stockItems, categories, getStockItems, getCategories, user } =
+    useAuth();
   const [loading, setLoading] = useState(true);
 
   // Calculations
@@ -51,7 +52,7 @@ const Home = () => {
     value: stockItems.filter((item) => item.categoryId === cat.$id).length,
   }));
 
-    const getCategory = (categoryId) => {
+  const getCategory = (categoryId) => {
     const filteratedCategory = categories.filter(
       (cate) => cate.$id === categoryId
     );
@@ -88,6 +89,18 @@ const Home = () => {
     <LoadingScreen />
   ) : (
     <div className="p-6 space-y-6 overflow-scroll w-full h-[80vh] bg-white">
+      {user.role === "admin" && (
+        <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 shadow-sm">
+          <p className="text-sm text-blue-800">
+            Your <span className="font-semibold">Company ID</span> is{" "}
+            <span className="px-2 py-1 bg-white rounded-md font-mono text-blue-900 border border-blue-300">
+              {user.companyId}
+            </span>
+            . Share this with your staff for authentication.
+          </p>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="shadow-sm border-none rounded-xl">
@@ -159,7 +172,9 @@ const Home = () => {
             <div>
               <p className="text-gray-500">Lowest Item in Stock</p>
               <h2 className="text-lg font-semibold">
-                {lowestItem.name} ({lowestItem.quantity})
+                {lowestItem
+                  ? `${lowestItem.name} (${lowestItem.quantity})`
+                  : "No Items"}
               </h2>
             </div>
           </CardContent>
@@ -184,7 +199,9 @@ const Home = () => {
             </span>
             <div>
               <p className="text-gray-500">Total Stock Value</p>
-              <h2 className="text-2xl font-bold">₦{totalValue}</h2>
+              <h2 className="text-2xl font-bold">
+                ₦{totalValue ? totalValue : "0"}
+              </h2>
             </div>
           </CardContent>
         </Card>
@@ -209,24 +226,28 @@ const Home = () => {
         <Card className="shadow-sm border-none rounded-xl">
           <CardContent className="p-4 h-72">
             <h3 className="font-semibold mb-3">Items Distribution</h3>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={90}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label
-                >
-                  {pieData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            {pieData.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={90}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label
+                  >
+                    {pieData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              "No item in stock"
+            )}
           </CardContent>
         </Card>
 

@@ -12,7 +12,8 @@ const AddStock = () => {
     price: "",
     categoryId: "",
     quantity: "",
-    userId: user.$id
+    userId: user.$id,
+    companyId: user.companyId
   });
   const [loading, setLoading] = useState(false);
   const [itemImg, setItemImg] = useState(false);
@@ -40,10 +41,10 @@ const AddStock = () => {
         setLoading(false)
         return
     }
-    const {name, price, quantity, categoryId, userId} = formData
+    const {name, price, quantity, categoryId, userId, companyId} = formData
     const imgFile = itemImg
     try {
-        const response = await addToStock(imgFile, name, categoryId, quantity, price, userId)
+        const response = await addToStock(imgFile, name, categoryId, quantity, price, userId, companyId)
         if (response.success) {
             toast.success(response.message)
             setFormData({

@@ -5,7 +5,7 @@ const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const CATEGORY_COLLECTION_ID = import.meta.env.VITE_APPWRITE_CATEGORY_COLLECTION_ID;
 const STOCK_COLLECTION_ID = import.meta.env.VITE_APPWRITE_STOCK_COLLECTION_ID;
 
-export const createCategory = async (name, description, userId) => {
+export const createCategory = async (name, description, userId, companyId) => {
   try {
     const newCategory = await databases.createDocument(
       DATABASE_ID,
@@ -15,6 +15,7 @@ export const createCategory = async (name, description, userId) => {
         name,
         description,
         userId,
+        companyId
       }
     );
     if (newCategory) {
@@ -41,12 +42,12 @@ export const fetchCategoryById = async (categoryId) => {
 };
 
 
-export const fetchCategories = async (userId) => {
+export const fetchCategories = async (companyId, userId) => {
   try {
     const result = await databases.listDocuments(
       DATABASE_ID,
       CATEGORY_COLLECTION_ID,
-      [Query.equal("userId", [userId])]
+      [Query.equal("companyId", [companyId])]
     );
 
     if (!result.documents || result.documents.length === 0) {
@@ -59,6 +60,7 @@ export const fetchCategories = async (userId) => {
           name: "General",
           description: "Default category",
           userId,
+          companyId
         }
       );
 

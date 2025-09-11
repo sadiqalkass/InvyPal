@@ -7,7 +7,7 @@ import { Link } from "react-router";
 
 
 const Stock = () => {
-  const { stockItems, getStockItems, getCategories, categories } = useAuth();
+  const { stockItems, getStockItems, getCategories, categories, user } = useAuth();
   const [stock, setStock] = useState([]);
   const [cateId, setCateId] = useState(null);
   const [filtredCategories, setFiltredCategories] = useState([]);
@@ -76,7 +76,19 @@ useEffect(() => {
       {stock.length ? (
         <>
           <div className="flex gap-2 items-center">
-            <p className="mb-3 text-lg font-medium">Stock</p>
+            <div>
+              <p className="mb-3 text-lg font-medium">Stock</p>
+                {/* Only show Add Stock if user is admin */}
+        {user?.role === "admin" && (
+          <Link
+            to="/add-stock"
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition"
+          >
+            + Add Stock
+          </Link>
+        )}
+            </div>
+            
             <span
               className={
                 cateId
@@ -129,12 +141,14 @@ useEffect(() => {
                   <p>{item.price}</p>
                 </div>
                 <div className="flex items-center gap-5">
-                  <p
-                    className="text-red-400 text-xl cursor-pointer"
-                    onClick={() => deleteItemHandle(item.$id, item?.imgId)}
-                  >
-                    <ion-icon name="trash-outline"></ion-icon>
-                  </p>
+                  {user.role === 'admin' && 
+                    <p
+                      className="text-red-400 text-xl cursor-pointer"
+                      onClick={() => deleteItemHandle(item.$id, item?.imgId)}
+                    >
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </p>
+                  }
                   <Link to={`/stock/${item.$id}`}>
                   <p className="text-green-400 text-xl cursor-pointer">
                     <ion-icon name="pencil-outline"></ion-icon>

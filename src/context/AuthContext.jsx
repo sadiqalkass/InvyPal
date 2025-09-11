@@ -3,12 +3,14 @@ import { signupUser, loginUser, logoutUser, getCurrentUser } from "../lib/action
 import { toast } from "react-toastify";
 import { fetchCategories } from "../lib/actions/category.actions";
 import { fetchStockItems } from "../lib/actions/stock.actions";
+import { fetchCompanyDetails } from "../lib/actions/company.actions";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [company, setCompany] = useState()
 
   const [categories, setCategories] = useState([]);
   const [stockItems, setStockItems] = useState([]);
@@ -27,27 +29,44 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
     checkUser();
   }, []);
 
   // Fetch data when user is available
   useEffect(() => {
     if (user) {
-      getCategories();
-      getStockItems();
+      getCompanyDets()
     }
   }, [user]);
 
+  //Fetch data when company is available
+  useEffect(()=>{
+    if (company !== null) {
+        getCategories();
+      getStockItems();
+    }
+  },[company])
+
   // --- AUTH FUNCTIONS ---
-  const signup = async (email, password, name, companyName) => {
-    const response = await signupUser(email, password, name, companyName);
-    setUser(response.newUser)
-    console.log(response.newUser)
-    localStorage.setItem("user", JSON.stringify(response.newUser))
-    toast.success("Account created successfully!");
-    return newUser;
-  };
+const signup = async (email, password, name, role, companyName = null, companyId = null) => {
+  let response;
+
+  if (role === "admin") {
+    // Use companyName, ignore companyId
+    response = await signupUser(email, password, name, role, companyName, null);
+  } else if (role === "staff") {
+    // Use companyId, ignore companyName
+    response = await signupUser(email, password, name, role, null, companyId);
+  } else {
+    throw new Error("Invalid role supplied");
+  }
+
+  setUser(response.newUser);
+  localStorage.setItem("user", JSON.stringify(response.newUser));
+  toast.success("Account created successfully!");
+  return response.newUser;
+};
+
 
  const login = async (email, password) => {
     const loggedInUser = await loginUser(email, password);
@@ -64,11 +83,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   // --- DATA FUNCTIONS ---
+  const getCompanyDets = async () => {
+ try {
+  const companyDets = await fetchCompanyDetails(user.companyId)
+  setCompany(companyDets);
+  console.log(companyDets, 'company')
+ } catch (error) {
+  console.log(error)
+  toast.error(error.message)
+ }
+};
+
   const getCategories = async () => {
     try {
-      const cate = await fetchCategories(user.$id);
+      const cate = await fetchCategories(company.$id, user.$id);
       setCategories(cate);
-      console.log(cate, 'categories bro')
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -77,9 +106,8 @@ export const AuthProvider = ({ children }) => {
 
   const getStockItems = async () => {
     try {
-      const items = await fetchStockItems(user.$id);
+      const items = await fetchStockItems(company.$id, user.$id);
       setStockItems(items);
-      console.log(items)
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -87,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout, categories, getCategories, stockItems, getStockItems }}>
+    <AuthContext.Provider value={{ user, signup, login, logout, categories, getCategories, stockItems, getStockItems, company }}>
       {!loading && children}
     </AuthContext.Provider>
   );

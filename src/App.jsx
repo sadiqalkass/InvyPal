@@ -16,24 +16,68 @@ import UpcomingFeatures from "./components/UpcomingFeatures";
 import EditCategory from "./pages/EditCategory";
 import EditStockItem from "./pages/EditStockItem";
 import ProfilePage from "./pages/Profile";
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   const {loading, user} = useAuth()
-  const router = createBrowserRouter(
+ const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="/" element={<Layout/>}>
-          <Route index element={<Home/>}/>
-          <Route path="category" element={<CategoryLayout/>}>
-            <Route index element={<AddCategory/>}/>
-            <Route path="list" element={<CategoryList/>}/>
-            <Route path=":id" element={<EditCategory/>}/>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+
+          {/* Admin Only Routes */}
+          <Route
+            path="category"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin"]}>
+                <CategoryLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AddCategory />} />
+            <Route path="list" element={<CategoryList />} />
+            <Route path=":id" element={<EditCategory />} />
           </Route>
-          <Route path="add-stock" element={<AddStock/>}/>
-          <Route path="stock" element={<Stock/>}/>
-          <Route path="stock/:id" element={<EditStockItem/>}/>
-          <Route path="profile" element={<ProfilePage user={user}/>}/>
-          <Route path="upcoming-features" element={<UpcomingFeatures/>}/>
+
+          <Route
+            path="add-stock"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin"]}>
+                <AddStock />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin + Staff Routes */}
+          <Route
+            path="stock"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin", "staff"]}>
+                <Stock />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="stock/:id"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin", "staff"]}>
+                <EditStockItem />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Shared Routes */}
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin", "staff"]}>
+                <ProfilePage user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="upcoming-features" element={<UpcomingFeatures />} />
+          <Route path="unauthorized" element={<h2>Access Denied</h2>} />
         </Route>
       </Route>
     )

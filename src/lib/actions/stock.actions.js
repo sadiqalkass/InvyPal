@@ -11,7 +11,8 @@ export const addToStock = async (
   categoryId,
   quantity,
   price,
-  userId
+  userId,
+  companyId
 ) => {
   try {
     const uploaded = await storage.createFile(BUCKET_ID, ID.unique(), imgFile);
@@ -29,6 +30,7 @@ export const addToStock = async (
         categoryId,
         imgUrl,
         userId,
+        companyId
       }
     );
 
@@ -41,12 +43,12 @@ export const addToStock = async (
   }
 };
 
-export const fetchStockItems = async (userId) => {
+export const fetchStockItems = async (companyId) => {
   try {
     const result = await databases.listDocuments(
       DATABASE_ID,
       STOCK_COLLECTION_ID,
-      [Query.equal("userId", [userId])] // wrap in an array
+      [Query.equal("companyId", [companyId])] // wrap in an array
     );
 
     const documents = result.documents.map((doc) => ({
