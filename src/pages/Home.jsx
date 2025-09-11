@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "../components/ui/Card";
+import { Link } from "react-router";
 import {
   Table,
   TableBody,
@@ -100,7 +101,14 @@ const Home = () => {
           </p>
         </div>
       )}
-
+      <div className="text-center my-6">
+      <Link
+        to="/upcoming-features"
+        className="inline-block px-6 py-3 text-white bg-blue-600 rounded-xl shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-200"
+      >
+        🚀 Click here to see our Upcoming Features
+      </Link>
+    </div>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="shadow-sm border-none rounded-xl">

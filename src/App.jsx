@@ -16,6 +16,7 @@ import UpcomingFeatures from "./components/UpcomingFeatures";
 import EditCategory from "./pages/EditCategory";
 import EditStockItem from "./pages/EditStockItem";
 import ProfilePage from "./pages/Profile";
+import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -77,7 +78,7 @@ function App() {
             }
           />
           <Route path="upcoming-features" element={<UpcomingFeatures />} />
-          <Route path="unauthorized" element={<h2>Access Denied</h2>} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
     )
