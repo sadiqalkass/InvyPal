@@ -76,8 +76,8 @@ useEffect(() => {
       {stock.length ? (
         <>
           <div className="flex gap-2 items-center">
-            <div>
-              <p className="mb-3 text-lg font-medium">Stock</p>
+            <div className="flex gap-3 items-center mb-1">
+              <p className="text-lg font-medium">Stock</p>
                 {/* Only show Add Stock if user is admin */}
         {user?.role === "admin" && (
           <Link
@@ -130,12 +130,12 @@ useEffect(() => {
                 <p className="max-sm:hidden">{index + 1}</p>
 
                 <div className="flex items-center gap-2">
-                  <img className="w-8 rounded-full h-8" src={item.imgUrl} alt="" />
+                  <img className="w-8 rounded-full h-8 hidden md:block" src={item.imgUrl} alt="" />
                   <p>{item.name.length  > 10 ? `${item.name.slice(0, 10)}...` : item.name}</p>
                 </div>
 
                 <p className={`max-sm:hidden ${Number(item.quantity) < 5? 'text-red-600': ''}`}>{item.quantity}</p>
-                <p className="text-[10px] md:text-sm">{getCategory(item.categoryId)}</p>
+                <p className="text-[10px] md:text-sm flex justify-center items-center md:block">{getCategory(item.categoryId)}</p>
 
                 <div className="flex items-center gap-2">
                   <p>{item.price}</p>

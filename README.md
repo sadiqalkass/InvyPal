@@ -1,26 +1,33 @@
-# React starter kit with Appwrite
+📦 InvyMate – Smart Inventory Management
+InvyMate is a modern inventory management system powered by Appwrite, designed to help businesses efficiently track products, stock levels, and sales in real time.
+🚀 Problem Statement
+Many businesses still rely on outdated inventory tracking (paper, spreadsheets), leading to stockouts, overstocking, and poor visibility into sales.
+💡 Our Solution
+InvyMate provides a simple, scalable, and real-time inventory platform where businesses can:
+- Add, edit, and manage products.
+- Track stock levels and receive low-stock alerts.
+- View insights through an interactive dashboard.
+- Collaborate with staff using secure role-based accounts.
+🛠 Tech Stack
+Frontend: React + Tailwind CSS
+Backend: Appwrite (Auth, Database, Storage, Realtime, Functions)
+📋 Features
+✅ Authentication (Admin & Staff roles)
+✅ Product management (CRUD)
+✅ Real-time stock updates
+✅ Dashboard with analytics & insights
+🗂 Database Schema
+Users: id, role, name, email
+Products: id, name, companyId, quantity, price, category, image, createdAt, updatedAt
+Compnies: id, name, ownerId, companylogo
+🏗 Setup Guide
+1. Clone repo & install dependencies.
+2. Configure Appwrite (Auth, DB, Storage).
+3. Add collections for Products & Transactions.
+4. Run `npm run dev` to start local server.
+🔮 Future Improvements
+- Multi-branch/warehouse support
+- Advanced analytics & forecasting
+- Transactions 
 
-Kickstart your React development with this ready-to-use starter project integrated with [Appwrite](https://www.appwrite.io)
-
-## 🚀Getting started
-
-###
-Clone the Project
-Clone this repository to your local machine using Git:
-
-`git clone https://github.com/appwrite/starter-for-react`
-
-## 🛠️ Development guid
-1. **Configure Appwrite**<br/>
-   Navigate to `.env` and update the values to match your Appwrite project credentials.
-2. **Customize as needed**<br/>
-   Modify the starter kit to suit your app's requirements. Adjust UI, features, or backend
-   integrations as per your needs.
-3. **Install dependencies**<br/>
-   Run `npm install` to install all dependencies.
-4. **Run the app**<br/>
-   Start the project by running `npm run dev`.
-
-## 💡 Additional notes
-- This starter project is designed to streamline your React development with Appwrite.
-- Refer to the [Appwrite documentation](https://appwrite.io/docs) for detailed integration guidance.
+⚡ Built with ❤️ as part of the InvyMate platform.

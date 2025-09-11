@@ -25,7 +25,7 @@ const CategoryList = () => {
   fetchData();
 }, []);
   return loading ? (<LoadingScreen/>) : (
-    <div className="w-full max-w-[65rem] m-5">
+    <div className="w-[90%] m-4 md:w-full max-w-[65rem] md:m-5">
       <p className="mb-3">Category List</p>
       <div className="bg-white border rounded text-sm max-h-[80vh] min-h-[60vh] overflow-y-scroll scrollbar-hide">
         <div className="hidden sm:grid grid-cols-[0.5fr_1fr_3fr_1fr_1fr] grid-flow-col py-3 px-6 border-b">

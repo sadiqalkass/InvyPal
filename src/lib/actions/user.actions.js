@@ -9,9 +9,11 @@ const COMPANY_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COMPANY_COLLECTION_I
 
 export const signupUser = async (email, password, name, role, companyName, companyId) => {
   try {
-    if(!password) throw new Error("yo man here is the issue")
     // Step 1: Create Appwrite account
     const newUserAcc = await account.create(ID.unique(), email, password, name);
+
+      // ✅ Create session immediately after signup
+    await account.createEmailPasswordSession(email, password);
 
     let finalCompanyId;
 
@@ -95,7 +97,6 @@ export const signupUser = async (email, password, name, role, companyName, compa
   }
 };
 
-
 //login
 export const loginUser = async (email, password) => {
   try {
@@ -156,10 +157,8 @@ export const logoutUser = async () => {
   }
 };
 
-export const UpdateUserInfo = async (userId, name, companyName, fileId) => {
+export const updateUserInfo = async (userId, name) => {
   try {
-    //Personal Info
-    if(name && !companyName && !fileId){
       const response = await databases.updateDocument(
         DATABASE_ID,
         USER_COLLECTION_ID,
@@ -167,32 +166,7 @@ export const UpdateUserInfo = async (userId, name, companyName, fileId) => {
         {
           name}
       )
-      if (response) {
-        return {success: true, message: "Personal Info updated successfully"}
-      }
-    }
-    //Company Settings
-    if(companyName && !name && fileId){
-      const imgUrl = await storage.createFile(
-        BUCKET_ID,
-        ID.unique(),
-        fileId
-      )
-      if (!imgUrl) throw new Error("Image not uploaded. Please try again");
-
-      const response = await databases.updateDocument(
-        DATABASE_ID,
-        USER_COLLECTION_ID,
-        userId,
-        {
-          companyName,
-          companyLogo: imgUrl}
-      ) 
-      if (response) {
-        return {success: true, message: "Company Info updated successfully"}
-      }
-    }
-
+      return {success: true, message: "Personal Info updated successfully"}
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "Updating user info failed. Try again.");

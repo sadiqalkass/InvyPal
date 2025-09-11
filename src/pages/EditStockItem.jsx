@@ -25,7 +25,7 @@ const EditStockItem = () => {
     };
     getStockItem();
   }, []);
-  return user.role === 'admin' && loading ? (
+  return loading ? (
     <LoadingScreen />
   ) : (
     <div className="m-4 md:mt-7 w-full">

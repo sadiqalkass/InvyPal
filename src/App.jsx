@@ -19,7 +19,7 @@ import ProfilePage from "./pages/Profile";
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-  const {loading, user} = useAuth()
+  const {loading, user, company} = useAuth()
  const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
@@ -72,7 +72,7 @@ function App() {
             path="profile"
             element={
               <ProtectedRoute user={user} allowedRoles={["admin", "staff"]}>
-                <ProfilePage user={user} />
+                <ProfilePage user={user} company={company} />
               </ProtectedRoute>
             }
           />

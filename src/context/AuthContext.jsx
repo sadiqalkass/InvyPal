@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { signupUser, loginUser, logoutUser, getCurrentUser } from "../lib/actions/user.actions";
+import {
+  signupUser,
+  loginUser,
+  logoutUser,
+  getCurrentUser,
+} from "../lib/actions/user.actions";
 import { toast } from "react-toastify";
 import { fetchCategories } from "../lib/actions/category.actions";
 import { fetchStockItems } from "../lib/actions/stock.actions";
@@ -10,65 +15,66 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [company, setCompany] = useState()
+  const [company, setCompany] = useState();
 
   const [categories, setCategories] = useState([]);
   const [stockItems, setStockItems] = useState([]);
 
   useEffect(() => {
     // On reload, try to get current session
-    const checkUser = async () => {
-      try {
-        setLoading(true)
-        const authUser =  await getCurrentUser() 
-        setUser(authUser);
-        localStorage.setItem("user", JSON.stringify(authUser));
-      } catch (err) {
-        setUser(null); // no session
-      } finally {
-        setLoading(false);
-      }
-    };
     checkUser();
   }, []);
 
   // Fetch data when user is available
   useEffect(() => {
     if (user) {
-      getCompanyDets()
+      getCompanyDets();
     }
   }, [user]);
 
   //Fetch data when company is available
-  useEffect(()=>{
+  useEffect(() => {
     if (company !== null) {
-        getCategories();
+      getCategories();
       getStockItems();
     }
-  },[company])
+  }, [company]);
 
   // --- AUTH FUNCTIONS ---
-const signup = async (email, password, name, role, companyName = null, companyId = null) => {
-  let response;
+  const signup = async (
+    email,
+    password,
+    name,
+    role,
+    companyName = null,
+    companyId = null
+  ) => {
+    let response;
 
-  if (role === "admin") {
-    // Use companyName, ignore companyId
-    response = await signupUser(email, password, name, role, companyName, null);
-  } else if (role === "staff") {
-    // Use companyId, ignore companyName
-    response = await signupUser(email, password, name, role, null, companyId);
-  } else {
-    throw new Error("Invalid role supplied");
-  }
+    if (role === "admin") {
+      // Use companyName, ignore companyId
+      response = await signupUser(
+        email,
+        password,
+        name,
+        role,
+        companyName,
+        null
+      );
+    } else if (role === "staff") {
+      // Use companyId, ignore companyName
+      response = await signupUser(email, password, name, role, null, companyId);
+    } else {
+      throw new Error("Invalid role supplied");
+    }
 
-  setUser(response.newUser);
-  localStorage.setItem("user", JSON.stringify(response.newUser));
-  toast.success("Account created successfully!");
-  return response.newUser;
-};
+    setUser(response.newUser);
+    localStorage.setItem("user", JSON.stringify(response.newUser));
+    toast.success("Account created successfully!");
+    return response.newUser;
+  };
 
-
- const login = async (email, password) => {
+  const login = async (email, password) => {
     const loggedInUser = await loginUser(email, password);
     setUser(loggedInUser);
     localStorage.setItem("user", JSON.stringify(loggedInUser));
@@ -83,16 +89,29 @@ const signup = async (email, password, name, role, companyName = null, companyId
   };
 
   // --- DATA FUNCTIONS ---
+  const checkUser = async () => {
+    try {
+      setLoading(true);
+      const authUser = await getCurrentUser();
+      setUser(authUser);
+      localStorage.setItem("user", JSON.stringify(authUser));
+    } catch (err) {
+      setUser(null); // no session
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getCompanyDets = async () => {
- try {
-  const companyDets = await fetchCompanyDetails(user.companyId)
-  setCompany(companyDets);
-  console.log(companyDets, 'company')
- } catch (error) {
-  console.log(error)
-  toast.error(error.message)
- }
-};
+    try {
+      const companyDets = await fetchCompanyDetails(user.companyId);
+      setCompany(companyDets);
+      console.log(companyDets, "company");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   const getCategories = async () => {
     try {
@@ -115,7 +134,21 @@ const signup = async (email, password, name, role, companyName = null, companyId
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout, categories, getCategories, stockItems, getStockItems, company }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signup,
+        login,
+        logout,
+        categories,
+        getCategories,
+        stockItems,
+        getStockItems,
+        company,
+        checkUser,
+        getCompanyDets
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

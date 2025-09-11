@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { updateCategory } from "../lib/actions/category.actions";
 import { updateStockItem } from "../lib/actions/stock.actions";
 import { toast } from "react-toastify";
-import { redirect } from "react-router";
+import { redirect, useNavigate } from "react-router";
 
 const UpdateForm = ({ state, category, stockItem }) => {
   const { categories } = useAuth();
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    cateName: category?.name,
-    itemName: stockItem?.name,
-    price: stockItem?.price,
-    description: category?.description,
-    itemCateId: stockItem?.categoryId,
-    cateId: category?.$id,
-    itemId: stockItem?.$id,
-    quantity: stockItem?.quantity,
-    imgId: stockItem?.imgId,
+    active: false,
+    cateName: '',
+    itemName: '',
+    price: '',
+    description: '',
+    itemCateId: '',
+    cateId: '',
+    itemId: '',
+    quantity: '',
+    imgId: ''
   });
   const [loading, setLoading] = useState(false);
   const [itemImg, setItemImg] = useState(false);
@@ -34,6 +36,21 @@ const UpdateForm = ({ state, category, stockItem }) => {
     </option>
   ));
 
+  useEffect(()=>{
+    setFormData({
+    active: true,
+      cateName: category?.name,
+    itemName: stockItem?.name,
+    price: stockItem?.price,
+    description: category?.description,
+    itemCateId: stockItem?.categoryId,
+    cateId: category?.$id,
+    itemId: stockItem?.$id,
+    quantity: stockItem?.quantity,
+    imgId: stockItem?.imgId,
+    })
+  },[])
+
   const onSubmitHandle = async (e) => {
     e.preventDefault();
     try {
@@ -47,7 +64,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
         if (response.success) {
           toast.success(response.message);
           setFormData({ ...formData, cateName: "", description: "" });
-          redirect("..");
+          navigate("/category/list");
         }
       }
       if (state === "Stock") {
@@ -74,7 +91,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
           });
           setItemImg(false)
           toast.success(response.message)
-          redirect('..')
+          navigate('/stock')
         }
       }
     } catch (error) {
@@ -85,7 +102,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
     }
   };
 
-  return (
+  return formData.active && (
     <form onSubmit={onSubmitHandle}>
       <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3">
         {state === "Stock" ? (
@@ -108,7 +125,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
                 hidden
               />
               <p>
-                Upload item <br /> picture
+                Change item <br /> picture
               </p>
             </div>
             <div className="flex flex-col lg:flex-row items-start gap-10 text-gray-600">

@@ -64,7 +64,7 @@ const AddStock = () => {
     }
   };
   return categories.length? (
-    <form onSubmit={onSubmitHandle} className="m-4 md:mt-7 w-full">
+    <form onSubmit={onSubmitHandle} className="m-2 w-[90%] md:m-4 md:mt-7 md:w-full">
       <p className="mb-3 text-lg font-medium">Add to Stock</p>
 
       <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3">
@@ -73,6 +73,7 @@ const AddStock = () => {
           <label htmlFor="item-img">
             <img
               className="w-[50px] h-[50px] bg-gray-100 rounded-2xl cursor-pointer"
+              accept="image/*"
               src={itemImg ? URL.createObjectURL(itemImg) : assests.image_area}
               alt="upload icon"
             />

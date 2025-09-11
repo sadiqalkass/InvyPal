@@ -30,26 +30,49 @@ export const fetchCompanyDetails = async (companyId) => {
 };
 
 
-export const addCompanyLogo = async (companyId, imgFile) => {
+export const updateCompanyInfo = async (companyId, imgFile, name) => {
     try {
+      if(name && imgFile){
         const uploded = await storage.createFile(
-            BUCKET_ID,
-            ID.unique(),
-            imgFile
+          BUCKET_ID,
+          ID.unique(),
+          imgFile
         )
         const imgUrl = uploded.$id
-        if (!imgUrl) throw new Error("Logo not uploaded. Please try again");
+        const uptCompany = await databases.updateDocument(
+            DATABASE_ID,
+            COMPANY_COLLECTION_ID,
+            companyId,
+            {companyLogo: imgUrl, name}
+        )
 
+       if(uptCompany) return {success: true, message: 'Company Logo and Name Updated'}
+
+      }else if(imgFile && !name){
+        const uploded = await storage.createFile(
+          BUCKET_ID,
+          ID.unique(),
+          imgFile
+        )
+        const imgUrl = uploded.$id
         const uptComapny = await databases.updateDocument(
             DATABASE_ID,
             COMPANY_COLLECTION_ID,
             companyId,
-            {companyLogo: imgUrl}
+            {comapanyLogo: imgUrl}
         )
-
-        if (uptComapny) return {success: true, message: 'Company Logo Uplaoded'}
-        
+        if(uptComapny) return {success: true, message: 'Company Name Uplaoded'}
+      }else{
+         const uptComapny = await databases.updateDocument(
+            DATABASE_ID,
+            COMPANY_COLLECTION_ID,
+            companyId,
+            {companyLogo: imgUrl, name}
+        )
+        if(uptComapny) return {success: true, message: 'Company Logo Uplaoded'}
+      } 
     } catch (error) {
-        
+       console.log(error)
+       throw new Error("Updateing Conpany Failed, Try Agin") 
     }
 }
