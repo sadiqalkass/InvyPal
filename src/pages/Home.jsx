@@ -24,7 +24,7 @@ import { useAuth } from "../context/AuthContext";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
-  const { stockItems, categories, getStockItems, getCategories, user } =
+  const { stockItems, categories, getStockItems, getCategories, user, company } =
     useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ const Home = () => {
 
   // Data for charts
   const categoryData = categories.map((cat) => ({
-    category: cat.name,
+    category: cat?.name,
     quantity: stockItems
       .filter((item) => item.categoryId === cat.$id)
       .reduce((sum, item) => sum + item.quantity, 0),
@@ -57,7 +57,7 @@ const Home = () => {
     const filteratedCategory = categories.filter(
       (cate) => cate.$id === categoryId
     );
-    const categoryName = filteratedCategory[0].name;
+    const categoryName = filteratedCategory[0]?.name || 'loading...'
     return categoryName;
   };
 
@@ -77,7 +77,11 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await Promise.all([getStockItems(), getCategories()]);
+        setLoading(true)
+        if (company) {
+          setLoading(true)
+          await Promise.all([getStockItems(), getCategories()]);
+        }
       } finally {
         setLoading(false);
       }
@@ -90,15 +94,8 @@ const Home = () => {
     <LoadingScreen />
   ) : (
     
-    <div className="p-6 space-y-6 overflow-scroll w-full h-[80vh] bg-white">
-      <div className="text-center my-6">
-      <Link
-        to="/upcoming-features"
-        className="inline-block px-6 py-3 text-white bg-blue-600 rounded-xl shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-200"
-      >
-        🚀 Click here to see our Upcoming Features
-      </Link>
-    </div>
+    <div className="p-6 space-y-6 overflow-scroll w-full h-[91vh] bg-white">
+  
       {user.role === "admin" && (
         <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 shadow-sm">
           <p className="text-sm text-blue-800">
@@ -110,6 +107,14 @@ const Home = () => {
           </p>
         </div>
       )}
+          <div className="text-center mb-3 mt-0">
+      <Link
+        to="/upcoming-features"
+        className="inline-block px-6 py-3 text-white bg-blue-600 rounded-xl shadow-md hover:bg-blue-700 hover:scale-105 transition-transform duration-200"
+      >
+        🚀 Click here to see our Upcoming Features
+      </Link>
+    </div>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="shadow-sm border-none rounded-xl">

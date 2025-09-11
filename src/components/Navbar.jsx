@@ -36,7 +36,7 @@ const Navbar = () => {
         <div className="p-3 rounded-xl hidden md:flex flex-col item-center justify-center text-center">
           <img src={company?.companyLogo? company.companyLogo : assests.company_logo} className="w-12 ml-2" alt="" />
           <p className="text-[10px] text-gray-600 text-center">
-            {company?.name ? company.name : "none"}
+            {company?.name ? company.name : "...."}
           </p>
         </div>
 

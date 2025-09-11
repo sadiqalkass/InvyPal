@@ -46,7 +46,7 @@ const features = [
 
 export default function UpcomingFeatures() {
   return (
-    <div className="min-h-screen p-6">
+    <div className="md:h-[90vh] h-screen p-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-2">
           <Clock className="w-7 h-7 text-blue-500" /> Upcoming Features

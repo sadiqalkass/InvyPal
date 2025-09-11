@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
   //Fetch data when company is available
   useEffect(() => {
-    if (company) {
+    if (company !== null) {
       getCategories();
       getStockItems();
     }
