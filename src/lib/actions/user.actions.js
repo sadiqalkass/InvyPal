@@ -100,21 +100,12 @@ export const signupUser = async (email, password, name, role, companyName, compa
 //login
 export const loginUser = async (email, password) => {
   try {
-    // check if already logged in
-    const current = await account.get();
+    const current = account.get()
     if (current) {
-
-    const result = await databases.listDocuments(
-    DATABASE_ID,
-    USER_COLLECTION_ID,
-    [Query.equal("email", [current.email])]
-  );
-  return {...current,...result.documents[0]}
+      account.deleteSession()
     }
-  } catch (err) {
-    // not logged in, so create one
-    await account.createEmailPasswordSession(email, password);
-  }
+    // check if already logged in
+    await account.createEmailPasswordSession(email, password)
 
   const authUser = await account.get();
 
@@ -126,6 +117,10 @@ export const loginUser = async (email, password) => {
 
   const userInfo = result.documents[0];
   return { ...authUser, ...userInfo };
+}catch(error){
+  console.log(error)
+  throw new Error(error.message);
+}
 };
 
 
@@ -166,7 +161,7 @@ export const updateUserInfo = async (userId, name) => {
         {
           name}
       )
-      return {success: true, message: "Personal Info updated successfully"}
+      if(response) return {success: true, message: "Personal Info updated successfully"}
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "Updating user info failed. Try again.");

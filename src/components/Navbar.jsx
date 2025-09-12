@@ -21,7 +21,7 @@ const Navbar = () => {
   };
   return (
     user && (
-      <div className="flex justify-between items-center px-4 sm:px-7 py-3 border-b bg-white">
+      <div className="flex justify-between items-center px-4 sm:px-4 py-2 border-b bg-white">
         <div className="flex items-center text-xs gap-2">
           <div className="overflow-hidden h-[50px] flex justify-start items-center w-[150px]">
             <img
@@ -30,12 +30,12 @@ const Navbar = () => {
               alt="InvyMate logo"
             />
           </div>
-          <p className="border px-2.5 py-0.5 rounded-full border-gray-500 text-gray-600">{user.role}</p>
+          <p className="border px-2.5 py-0.5 rounded-full border-gray-500 text-gray-600 hidden md:block">{user.role}</p>
         </div>
 
         <div className="p-3 rounded-xl hidden md:flex flex-col item-center justify-center text-center">
-          <img src={company?.companyLogo? company.companyLogo : assests.company_logo} className="w-12 ml-2" alt="" />
-          <p className="text-[10px] text-gray-600 text-center">
+          <img src={company?.companyLogo? company.companyLogo : assests.company_logo} className="w-12" alt="" />
+          <p className="text-[11px] text-gray-600 text-center">
             {company?.name ? company.name : "...."}
           </p>
         </div>
@@ -66,7 +66,7 @@ const Navbar = () => {
           >
             <div className="flex items-center justify-between px-5 py-6">
               <div className="p-3 rounded-xl flex flex-col item-center justify-center text-center">
-                <img src={assests.company_logo} className="w-12 ml-2" alt="" />
+                <img src={assests.company_logo} className="w-12" alt="" />
                 <p className="text-[10px] text-gray-600 text-center">
                   {company?.name ? company.name : "......"}
                 </p>
@@ -79,7 +79,9 @@ const Navbar = () => {
               </span>
             </div>
             <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-xl font-medium">
-              <NavLink onClick={() => setShowMenu(false)} to="/">
+              <NavLink onClick={() => setShowMenu(false)} className={({ isActive }) =>
+                  `px-4 py-2 rounded inline-block ${isActive ? "bg-blue-400 text-white" : ""}`
+                } to="/">
                 <p className="px-4 py-2 rounded inline-block">Dashboard</p>
               </NavLink>
               <NavLink

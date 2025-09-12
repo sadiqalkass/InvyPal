@@ -29,16 +29,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       getCompanyDets();
-    }
-  }, [user]);
-
-  //Fetch data when company is available
-  useEffect(() => {
-    if (company !== null) {
       getCategories();
       getStockItems();
     }
-  }, [company]);
+  }, [user]);
+
 
   // --- AUTH FUNCTIONS ---
   const signup = async (
@@ -115,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 
   const getCategories = async () => {
     try {
-      const cate = await fetchCategories(company.$id, user.$id);
+      const cate = await fetchCategories(user.companyId, user.$id);
       setCategories(cate);
     } catch (error) {
       console.log(error);
@@ -125,7 +120,7 @@ export const AuthProvider = ({ children }) => {
 
   const getStockItems = async () => {
     try {
-      const items = await fetchStockItems(company.$id, user.$id);
+      const items = await fetchStockItems(user.companyId, user.$id);
       setStockItems(items);
     } catch (error) {
       console.log(error);

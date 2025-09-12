@@ -46,7 +46,7 @@ const features = [
 
 export default function UpcomingFeatures() {
   return (
-    <div className="md:h-[90vh] h-screen p-6">
+    <div className="max-h-[85vh] overflow-scroll h-screen p-6 bg-white">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-2">
           <Clock className="w-7 h-7 text-blue-500" /> Upcoming Features
@@ -56,7 +56,7 @@ export default function UpcomingFeatures() {
           upcoming updates. Stay tuned!
         </p>
 
-        <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_1fr] gap-6 max-h-[80vh] overflow-scroll">
+        <div className="grid grid-cols-[1fr] md:grid-cols-[1fr_1fr] gap-6">
           {features.map((feature, idx) => (
             <Card key={idx} className="shadow-md rounded-2xl">
               <CardContent className="p-6">

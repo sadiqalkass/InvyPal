@@ -24,7 +24,7 @@ import { useAuth } from "../context/AuthContext";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
-  const { stockItems, categories, getStockItems, getCategories, user, company } =
+  const { stockItems, categories, getStockItems, getCategories, user } =
     useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -78,8 +78,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        if (company) {
-          setLoading(true)
+        if (user) {
           await Promise.all([getStockItems(), getCategories()]);
         }
       } finally {

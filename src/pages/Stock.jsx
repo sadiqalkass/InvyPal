@@ -7,7 +7,7 @@ import { Link } from "react-router";
 
 
 const Stock = () => {
-  const { stockItems, getStockItems, getCategories, categories, user } = useAuth();
+  const { stockItems, getStockItems, getCategories, categories, user} = useAuth();
   const [stock, setStock] = useState([]);
   const [cateId, setCateId] = useState(null);
   const [filtredCategories, setFiltredCategories] = useState([]);
@@ -37,7 +37,10 @@ const Stock = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      await Promise.all([getStockItems(), getCategories()]);
+      setLoading(true)
+      if (user) {
+        await Promise.all([getStockItems(), getCategories()]);
+      }
     } finally {
       setLoading(false);
     }
