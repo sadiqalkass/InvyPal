@@ -1,4 +1,4 @@
-📋 InvyMate Roadmap
+📋 InvyPal Roadmap
 ✅ Phase 1: Core Platform (MVP)
 - Setup Appwrite project (Auth, DB, Storage).
 - Implement signup/login with role-based access (admin/staff).

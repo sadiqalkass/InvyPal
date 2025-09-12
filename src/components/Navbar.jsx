@@ -27,7 +27,7 @@ const Navbar = () => {
             <img
               src={assests.logo}
               className="md:w-[250px] w-[85%]"
-              alt="InvyMate logo"
+              alt="InvyPal logo"
             />
           </div>
           <p className="border px-2.5 py-0.5 rounded-full border-gray-500 text-gray-600 hidden md:block">{user.role}</p>

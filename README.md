@@ -1,9 +1,9 @@
-📦 InvyMate – Smart Inventory Management
-InvyMate is a modern inventory management system powered by Appwrite, designed to help businesses efficiently track products, stock levels, and sales in real time.
+📦 InvyPal – Smart Inventory Management
+InvyPal is a modern inventory management system powered by Appwrite, designed to help businesses efficiently track products, stock levels, and sales in real time.
 🚀 Problem Statement
 Many businesses still rely on outdated inventory tracking (paper, spreadsheets), leading to stockouts, overstocking, and poor visibility into sales.
 💡 Our Solution
-InvyMate provides a simple, scalable, and real-time inventory platform where businesses can:
+InvyPal provides a simple, scalable, and real-time inventory platform where businesses can:
 - Add, edit, and manage products.
 - Track stock levels and receive low-stock alerts.
 - View insights through an interactive dashboard.
@@ -30,4 +30,4 @@ Compnies: id, name, ownerId, companylogo
 - Advanced analytics & forecasting
 - Transactions 
 
-⚡ Built with ❤️ as part of the InvyMate platform.
+⚡ Built with ❤️ as part of the InvyPal platform.
