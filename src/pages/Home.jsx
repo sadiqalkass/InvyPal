@@ -24,7 +24,7 @@ import { useAuth } from "../context/AuthContext";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
-  const { stockItems, categories, getStockItems, getCategories, user } =
+  const { stockItems, categories, getStockItems, getCategories, user, getTransactions, transactions, getSeller } =
     useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -79,7 +79,7 @@ const Home = () => {
       try {
         setLoading(true)
         if (user) {
-          await Promise.all([getStockItems(), getCategories()]);
+          await Promise.all([getStockItems(), getCategories(), getTransactions]);
         }
       } finally {
         setLoading(false);
@@ -319,6 +319,36 @@ const Home = () => {
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{getCategory(item.categoryId)}</TableCell>
                       <TableCell>₦{item.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+            {/* Recent Trasactions */}
+        <Card className="shadow-sm border-none rounded-xl w-full">
+          <CardContent className="p-4">
+            <h3 className="font-semibold mb-3">Recent Transactions</h3>
+            {stockItems.length === 0 ? (
+              <p className="text-gray-500">No transaction made.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>item Name</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Sold By</TableHead>
+                    <TableHead>Price</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {transactions.slice(0, 5).map((item) => (
+                    <TableRow key={item.$id}>
+                      <TableCell>{item.itemName}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>{getSeller(item.userId)}</TableCell>
+                      <TableCell>₦{item.amount}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

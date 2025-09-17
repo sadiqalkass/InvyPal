@@ -31,7 +31,6 @@ const AddCategory = () => {
           description: "",
           userId: user?.$id || "",
         });
-        getCategories();
       }
     } catch (error) {
       console.log(error);

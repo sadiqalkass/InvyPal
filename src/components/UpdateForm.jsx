@@ -50,6 +50,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
     imgId: stockItem?.imgId,
     })
   },[])
+  console.log(stockItem)
 
   const onSubmitHandle = async (e) => {
     e.preventDefault();
@@ -104,7 +105,7 @@ const UpdateForm = ({ state, category, stockItem }) => {
 
   return formData.active && (
     <form onSubmit={onSubmitHandle}>
-      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3">
+      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3 overflow-scroll">
         {state === "Stock" ? (
           <>
             <div className="flex items-center gap-4 mb-8 text-gray-500">

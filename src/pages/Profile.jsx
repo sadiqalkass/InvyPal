@@ -25,8 +25,8 @@ export default function ProfilePage({ user, company }) {
   const [formData, setFormData] = useState({
     userId: user.$id,
     name: user.name,
-    companyId: company.$id,
-    companyName: company.name,
+    companyId: company?.$id,
+    companyName: company?.name,
   });
   const [logo, setLogo] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,6 @@ export default function ProfilePage({ user, company }) {
       setLoading(true);
       const name = formData.companyName
       const imgFile = logo
-      console.log(name, formData.companyId, imgFile, 'yep')
       const response = await updateCompanyInfo(formData.companyId, imgFile, name)
       if (response.success) {
         toast.success(response.message)

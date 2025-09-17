@@ -54,7 +54,6 @@ const AddStock = () => {
                 price:''
             })
             setItemImg(false)
-            getStockItems()
         } 
     } catch (error) {
         console.log(error)
@@ -67,7 +66,7 @@ const AddStock = () => {
     <form onSubmit={onSubmitHandle} className="m-2 w-[90%] md:m-4 md:mt-7 md:w-full">
       <p className="mb-3 text-lg font-medium">Add to Stock</p>
 
-      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3">
+      <div className="bg-white px-8 py-8 border rounded w-full max-w-4xl max-h-[80vh] ml-3 overflow-scroll">
         <div className="flex items-center gap-4 mb-8 text-gray-500">
           {/* this work because of the similer id */}
           <label htmlFor="item-img">

@@ -3,7 +3,7 @@ import "./App.css";
 import Login from "./pages/Login";
 import { createBrowserRouter, Route, RouterProvider } from "react-router";
 import { createRoutesFromElements } from "react-router";
-import Home from './pages/Home'
+import Home from "./pages/Home";
 import Layout from "./layout/layout";
 import { useAuth } from "./context/AuthContext";
 import AddCategory from "./pages/AddCategory";
@@ -17,11 +17,14 @@ import EditCategory from "./pages/EditCategory";
 import EditStockItem from "./pages/EditStockItem";
 import ProfilePage from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from "./components/ProtectedRoute";
+import Sell from "./pages/Sell";
+import TransactionTable from "./pages/TransactionTable";
+import Transactionslayout from "./layout/Transactionslayout";
 
 function App() {
-  const {loading, user, company} = useAuth()
- const router = createBrowserRouter(
+  const { loading, user, company } = useAuth();
+  const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route path="/" element={<Layout />}>
@@ -77,23 +80,36 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="transactions"
+            element={
+              <ProtectedRoute user={user} allowedRoles={["admin", "staff"]}>
+                <Transactionslayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<TransactionTable />} />
+            <Route path="sell" element={<Sell />} />
+          </Route>
           <Route path="upcoming-features" element={<UpcomingFeatures />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
     )
-  )
+  );
 
-  return loading? (<LoadingScreen/>): user ? (
-     <>
+  return loading ? (
+    <LoadingScreen />
+  ) : user ? (
+    <>
       <RouterProvider router={router} />
     </>
-  ): (
+  ) : (
     <>
-    <ToastContainer/>
-    <Login/>
+      <ToastContainer />
+      <Login />
     </>
-  )
+  );
 }
 
 export default App;

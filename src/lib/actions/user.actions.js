@@ -138,10 +138,23 @@ export const getCurrentUser = async() => {
 else return
   } catch (error) {
     console.log(error)
-    throw new Error(error.message);
+    throw new Error('Failed to fetch user, Reload/Login again');
   }
 }
 
+export const fetchCompanyUsers = async (companyId) => {
+  try{
+    const companyUsers = await databases.listDocuments(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      [Query.equal('companyId', [companyId])]
+    )
+    return companyUsers.documents
+  }catch(error){
+     console.log(error)
+    throw new Error(error.message);
+  }
+}
 
 // Logout
 export const logoutUser = async () => {

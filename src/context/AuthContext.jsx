@@ -4,11 +4,14 @@ import {
   loginUser,
   logoutUser,
   getCurrentUser,
+  fetchCompanyUsers,
 } from "../lib/actions/user.actions";
 import { toast } from "react-toastify";
 import { fetchCategories } from "../lib/actions/category.actions";
 import { fetchStockItems } from "../lib/actions/stock.actions";
 import { fetchCompanyDetails } from "../lib/actions/company.actions";
+import { setupRealtimeListeners } from "../lib/realtime";
+import { fetchTransactions } from "../lib/actions/transaction.actions";
 
 const AuthContext = createContext();
 
@@ -19,6 +22,8 @@ export const AuthProvider = ({ children }) => {
 
   const [categories, setCategories] = useState([]);
   const [stockItems, setStockItems] = useState([]);
+  const [transactions, setTransactions] = useState([])
+  const [companyPersonal, setCompanyPersonal] = useState([])
 
   useEffect(() => {
     // On reload, try to get current session
@@ -26,13 +31,44 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Fetch data when user is available
-  useEffect(() => {
-    if (user) {
-      getCompanyDets();
-      getCategories();
-      getStockItems();
+useEffect(() => {
+  if (!user) return;
+
+  let unsubscribe; // capture outside so cleanup works
+
+  const init = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch all data first
+      await Promise.all([
+        getStockItems(),
+        getCategories(),
+        getCompanyDets(),
+        getTransactions(),
+        getCompanyUsers()
+      ]);
+
+      // Setup realtime listeners
+      unsubscribe = setupRealtimeListeners(
+        user.companyId,
+        setCategories,
+        setStockItems,
+        setTransactions
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-  }, [user]);
+  };
+
+  init();
+
+  return () => {
+    if (unsubscribe) unsubscribe(); // cleanup works correctly now
+  };
+}, [user]);
 
 
   // --- AUTH FUNCTIONS ---
@@ -101,7 +137,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const companyDets = await fetchCompanyDetails(user.companyId);
       setCompany(companyDets);
-      console.log(companyDets, "company");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -128,6 +163,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getTransactions = async () => {
+    try {
+      const transactionsDets = await fetchTransactions(user.companyId)
+      setTransactions(transactionsDets)
+    } catch (error) {
+        console.log(error);
+      toast.error(error.message);
+    }
+  }
+
+  const getCompanyUsers = async (params) => {
+    try {
+      const companyUsers = await fetchCompanyUsers(user.companyId)
+      setCompanyPersonal(companyUsers)
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  }
+
+   const getSeller = (userId) => {
+    if (companyPersonal) {
+      const seller = companyPersonal.filter(user => user.$id === userId)
+      console.log(seller)
+      return (`${seller[0].name} - ${seller[0].role}`)
+    }else{
+      return '.....'
+    }
+    }
+
   return (
     <AuthContext.Provider
       value={{
@@ -142,6 +207,10 @@ export const AuthProvider = ({ children }) => {
         company,
         checkUser,
         getCompanyDets,
+        transactions,
+        companyPersonal,
+        getSeller,
+        getTransactions
       }}
     >
       {!loading && children}
