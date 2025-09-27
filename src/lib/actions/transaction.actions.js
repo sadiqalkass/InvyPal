@@ -42,7 +42,7 @@ export const addTransaction = async (itemId, quantitySold, userId, companyId) =>
       { quantity: stockItem.quantity - quantitySold }
     );
 
-    return { success: true, message: 'Item sold successfully' };
+    return { success: true, message: 'Item sold successfully', transaction };
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "Transaction failed");
